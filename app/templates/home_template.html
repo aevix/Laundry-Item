@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Items Still Out</h1>
-<form action="" method = "GET" novalidate>
-  <table>
-
-  </table>
-</form>
+<h1>Home</h1><br>
+<h2>Items Still Out</h2>
+{% for item in items %}
+  {% include "_item.html" %}
+{% endfor %}
 {% endblock %}
 

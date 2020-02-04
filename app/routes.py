@@ -4,6 +4,9 @@ from app import app, db
 @app.route('/')
 @app.route('/home_template', methods=['GET'])
 def Home():
+    items = [
+        {'barcode': id, 'type': item_type, 'size': item_size}
+    ]
     return render_template('home_template.html', title='Home')
 
 @app.route('/Incoming')
