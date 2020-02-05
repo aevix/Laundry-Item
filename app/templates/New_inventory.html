@@ -2,4 +2,13 @@
 
 {% block content %}
 <h1>Enter New Inventory</h1>
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.barcode.label }} {{ form.barcode(size=32)}}<br>
+        {{ form.type.label }} {{ form.type(size=10) }}<br>
+        {{ form.size.label }} {{ form.size(size=10) }}<br>
+        {{ form.submit() }} 
+    </p>
+</form>
 {% endblock %}

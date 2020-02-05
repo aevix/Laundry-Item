@@ -1,12 +1,10 @@
 from flask import render_template, flash
 from app import app, db
+from app.forms import Enter_new_item
 
 @app.route('/')
 @app.route('/home_template', methods=['GET'])
 def Home():
-    items = [
-        {'barcode': id, 'type': item_type, 'size': item_size}
-    ]
     return render_template('home_template.html', title='Home')
 
 @app.route('/Incoming')
@@ -19,4 +17,5 @@ def Outgoing():
 
 @app.route('/New_inventory')
 def New_inventory():
-    return render_template('New_inventory.html', title='New_inventory')
+    form = Enter_new_item()
+    return render_template('New_inventory.html', title='New_inventory', form=form)
