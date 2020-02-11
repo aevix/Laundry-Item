@@ -12,11 +12,23 @@
     </dl>
     <p><input type="submit" value=Submit></p>
 </form>
-{% for item in items %}
-<table>
+<style>
+    table, th, td {
+      border: 1px solid black;
+    }
+</style>
+
+<table style="width:100%">
     <tr valign="top">
-        <td>{{ item.barcode }}{{ item.type }}{{ item.size }}</td>
+        <th>Barcode</th>
+        <th>Item Type</th>
+        <th>Item Size</th>
     </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.barcode }}</td><td>{{ item.item_type }}</td><td>{{ item.item_size }}</td>
+    </tr>
+    {% endfor %}
 </table>
-{% endfor %}
+
 {% endblock %}
