@@ -2,13 +2,21 @@
 
 {% block content %}
 <h1>Enter New Inventory</h1>
-<form action="" method="post" novalidate>
+<form action="" method="post">
     {{ form.hidden_tag() }}
-    <p>
-        {{ form.barcode.label }} {{ form.barcode(size=32)}}<br>
-        {{ form.type.label }} {{ form.type(size=10) }}<br>
-        {{ form.size.label }} {{ form.size(size=10) }}<br>
-        {{ form.submit() }} 
-    </p>
+    {% from "_formhelpers.html" import render_field %}
+    <dl>
+        {{ render_field(form.barcode) }}
+        {{ render_field(form.type) }}
+        {{ render_field(form.size) }}
+    </dl>
+    <p><input type="submit" value=Submit></p>
 </form>
+{% for item in items %}
+<table>
+    <tr valign="top">
+        <td>{{ item.barcode }}{{ item.type }}{{ item.size }}</td>
+    </tr>
+</table>
+{% endfor %}
 {% endblock %}
