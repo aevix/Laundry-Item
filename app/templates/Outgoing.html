@@ -2,4 +2,12 @@
 
 {% block content %}
 <h1>Outgoing</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {% from "_formhelpers.html" import render_field %}
+    <dl>
+        {{ render_field(form.barcode) }}
+    </dl>
+    <p><input type="submit" value=Submit></p>
+</form>
 {% endblock %}
