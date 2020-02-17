@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
-from app.forms import Enter_new_item
+from app.forms import item_template
 from app.models import Laundry
 from werkzeug.urls import url_parse
 from datetime import datetime
@@ -10,9 +10,11 @@ from datetime import datetime
 def Home():
     return render_template('home_template.html', title='Home')
 
-@app.route('/Incoming')
+@app.route('/Incoming', methods = ['GET', 'POST'])
 def Incoming():
-    return render_template('Incoming.html', title='Incoming')
+    form = item_template()
+    search = Laundry.query.filter_by(barcode=form.barcode.data).first()
+    return render_template('Incoming.html', title='Incoming', form=form, search=search)
 
 @app.route('/Outgoing')
 def Outgoing():
@@ -20,7 +22,7 @@ def Outgoing():
 
 @app.route('/New_inventory', methods = ['GET', 'POST'])
 def New_inventory():
-    form = Enter_new_item()
+    form = item_template()
     if form.validate_on_submit():
         new_item = Laundry(barcode = form.barcode.data, item_type=form.type.data,item_size=form.size.data)
         db.session.add(new_item)

@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Incoming</h1>
-<form action="" method="post">
+<form action="" method="POST">
     {{ form.hidden_tag() }}
     {% from "_formhelpers.html" import render_field %}
     <dl>
@@ -10,4 +10,20 @@
     </dl>
     <p><input type="submit" value=Submit></p>
 </form>
+<style>
+    table, th, td {
+      border: 1px solid black;
+    }
+</style>
+<table style="width:100%">
+    <tr valign="top">
+        <th>Barcode</th>
+        <th>Item Type</th>
+        <th>Item Size</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td>{{ search.barcode }}</td><td>{{ search.item_type }}</td><td>{{ search.item_size }}</td><td>{{ search.status }}</td>
+    </tr>
+</table>
 {% endblock %}
