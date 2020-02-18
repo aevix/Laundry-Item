@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app import app, db
-from app.forms import item_template
-from app.models import Laundry
+from app.forms import item_template, search_item
+from app.models import Laundry, Search
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -12,9 +13,17 @@ def Home():
 
 @app.route('/Incoming', methods = ['GET', 'POST'])
 def Incoming():
-    form = item_template()
-    search = Laundry.query.filter_by(barcode=form.barcode.data).first()
-    return render_template('Incoming.html', title='Incoming', form=form, search=search)
+    form = search_item()
+    enter = Laundry.query.filter_by(barcode=form.barcode.data).first()
+    if form.validate_on_submit():
+        if enter is None:
+            flash('Barcode is not registered in the inventory.')
+        else:
+            searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
+            db.session.add(searched)
+            db.session.commit()
+    items = Search.query.all()    
+    return render_template('Incoming.html', title='Incoming', form=form, items=items)
 
 @app.route('/Outgoing')
 def Outgoing():

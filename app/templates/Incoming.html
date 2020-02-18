@@ -6,9 +6,10 @@
     {{ form.hidden_tag() }}
     {% from "_formhelpers.html" import render_field %}
     <dl>
-        {{ render_field(form.barcode) }}
+        <p>{{ render_field(form.barcode) }}</p>
+        <p>{{ form.Submit() }}</p>
     </dl>
-    <p><input type="submit" value=Submit></p>
+    <p>{{ form.Incoming() }}</p>
 </form>
 <style>
     table, th, td {
@@ -22,8 +23,11 @@
         <th>Item Size</th>
         <th>Status</th>
     </tr>
+    {% for item in items %}
     <tr>
-        <td>{{ search.barcode }}</td><td>{{ search.item_type }}</td><td>{{ search.item_size }}</td><td>{{ search.status }}</td>
+        <td>{{ item.barcode }}</td><td>{{ item.item_type }}</td><td>{{ item.item_size }}</td><td>{{ item.status }}</td>
     </tr>
+    {% endfor %}
+
 </table>
 {% endblock %}

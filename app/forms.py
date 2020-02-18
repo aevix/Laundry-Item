@@ -9,3 +9,11 @@ class item_template(FlaskForm):
     status = BooleanField('Status')
     submit = SubmitField('Enter Item')
 
+class search_item(FlaskForm):
+    barcode = StringField('Barcode', validators=[DataRequired()])
+    Submit = SubmitField('Search')
+    Incoming = SubmitField('Incoming')
+
+
+
+

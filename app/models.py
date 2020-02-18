@@ -22,3 +22,14 @@ class Timestamp(db.Model):
 
     def __repr__(self):
         return '<time: {}>'.format(self.timestamp)
+
+class Search(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    barcode = db.Column(db.String(20), index = True)
+    item_type = db.Column(db.String(10), index = True)
+    item_size = db.Column(db.String(10), index = True)
+    item_note = db.Column(db.String(20), index = True)
+    status = db.Column(db.Boolean(), index=True)
+    
+    def __repr__(self):
+        return '<Searched: {} {} {} {} {}>'.format(self.barcode, self.item_type, self.item_size, self.item_note, self.status)
