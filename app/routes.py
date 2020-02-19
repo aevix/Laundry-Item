@@ -15,13 +15,18 @@ def Home():
 def Incoming():
     form = search_item()
     enter = Laundry.query.filter_by(barcode=form.barcode.data).first()
-    if form.validate_on_submit():
-        if enter is None:
-            flash('Barcode is not registered in the inventory.')
-        else:
-            searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
-            db.session.add(searched)
-            db.session.commit()
+    if form.Search.data:
+        if form.validate_on_submit():
+            if enter is None:
+                flash('Barcode is not registered in the inventory.')
+            else:
+                searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
+                db.session.add(searched)
+                db.session.commit()
+    elif form.Incoming.data:
+        db.session.query(Search).delete()
+        db.session.commit()
+        return redirect(url_for('Incoming'))
     items = Search.query.all()    
     return render_template('Incoming.html', title='Incoming', form=form, items=items)
 

@@ -10,9 +10,9 @@ class item_template(FlaskForm):
     submit = SubmitField('Enter Item')
 
 class search_item(FlaskForm):
-    barcode = StringField('Barcode', validators=[DataRequired()])
-    Submit = SubmitField('Search')
-    Incoming = SubmitField('Incoming')
+    barcode = StringField('Barcode', validators=None)
+    Search = SubmitField(label='Search')
+    Incoming = SubmitField(label='Incoming')
 
 
 
