@@ -22,6 +22,8 @@ def Incoming():
             else:
                 if Search.query.filter_by(barcode=form.barcode.data).first() != None:
                     flash('Item is already scanned in the incoming queue!')
+                if enter.status == True:
+                    flash('Item has not been scanned out!')
                 else:
                     searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
                     db.session.add(searched)
