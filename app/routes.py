@@ -32,7 +32,7 @@ def Incoming():
         db.session.query(Search).delete()
         db.session.commit()
         return redirect(url_for('Incoming'))
-    items = Search.query.all()    
+    items = Search.query.filter_by(status=False)    
     return render_template('Incoming.html', title='Incoming', form=form, items=items)
 
 @app.route('/Outgoing')
