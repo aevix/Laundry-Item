@@ -20,9 +20,12 @@ def Incoming():
             if enter is None:
                 flash('Barcode is not registered in the inventory.')
             else:
-                searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
-                db.session.add(searched)
-                db.session.commit()
+                if Search.query.filter_by(barcode=form.barcode.data).first() != None:
+                    flash('Item is already scanned in the incoming queue!')
+                else:
+                    searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
+                    db.session.add(searched)
+                    db.session.commit()
     elif form.Incoming.data:
         db.session.query(Search).delete()
         db.session.commit()
@@ -38,7 +41,7 @@ def Outgoing():
 def New_inventory():
     form = item_template()
     if form.validate_on_submit():
-        new_item = Laundry(barcode = form.barcode.data, item_type=form.type.data,item_size=form.size.data)
+        new_item = Laundry(barcode = form.barcode.data, item_type=form.type.data,item_size=form.size.data, status=True)
         db.session.add(new_item)
         db.session.commit()
         flash('Item has entered the database!')
