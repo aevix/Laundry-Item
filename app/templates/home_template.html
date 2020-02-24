@@ -3,8 +3,24 @@
 {% block content %}
 <h1>Home</h1><br>
 <h2>Items Still Out</h2>
-{% for item in items %}
-  {% include "_item.html" %}
-{% endfor %}
+<style>
+  table, th, td {
+    border: 1px solid black;
+  }
+</style>
+<table style="width:100%">
+  <tr valign="top">
+      <th>Barcode</th>
+      <th>Item Type</th>
+      <th>Item Size</th>
+      <th>Status</th>
+  </tr>
+  {% for item in items %}
+  <tr>
+      <td>{{ item.barcode }}</td><td>{{ item.item_type }}</td><td>{{ item.item_size }}</td><td>{{ item.status }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
 {% endblock %}
 

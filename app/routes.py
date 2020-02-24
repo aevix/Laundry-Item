@@ -9,7 +9,8 @@ from datetime import datetime
 @app.route('/')
 @app.route('/home_template', methods=['GET'])
 def Home():
-    return render_template('home_template.html', title='Home')
+    items = Laundry.query.filter_by(status=False)
+    return render_template('home_template.html', title='Home', items=items)
 
 @app.route('/Incoming', methods = ['GET', 'POST'])
 def Incoming():
