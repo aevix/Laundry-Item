@@ -24,7 +24,7 @@ def Incoming():
                     flash('Item is already scanned in the incoming queue!')
                 if enter.status == True:
                     flash('Item has not been scanned out!')
-                else:
+                if enter.status == False and Search.query.filter_by(barcode=form.barcode.data).first() == None:
                     searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
                     db.session.add(searched)
                     db.session.commit()
@@ -35,9 +35,34 @@ def Incoming():
     items = Search.query.filter_by(status=False)    
     return render_template('Incoming.html', title='Incoming', form=form, items=items)
 
-@app.route('/Outgoing')
+@app.route('/Outgoing', methods = ['GET', 'POST'])
 def Outgoing():
-    return render_template('Outgoing.html', title='Outgoing')
+    form = search_item()
+    enter = Laundry.query.filter_by(barcode=form.barcode.data).first()
+    if form.Search.data:
+        if form.validate_on_submit():
+            if enter is None:
+                flash('Barcode is not registered in the inventory.')
+            else:
+                if Search.query.filter_by(barcode=form.barcode.data).first() != None:
+                    flash('Item is already scanned in the Outgoing queue!')
+                if enter.status == False:
+                    flash('Item has not been scanned in!')
+                if enter.status == True and Search.query.filter_by(barcode=form.barcode.data).first() == None:
+                    searched = Search(barcode=enter.barcode, item_type=enter.item_type, item_size=enter.item_size, status=enter.status)
+                    db.session.add(searched)
+                    db.session.commit()
+    elif form.Outgoing.data:
+        changes = Search.query.all()
+        for change in changes:
+            change_laundry = Laundry.query.filter_by(barcode=change.barcode)
+            change_laundry.status=False
+            db.session.commit()
+        db.session.query(Search).delete()
+        db.session.commit()
+        return redirect(url_for('Outgoing'))
+    items = Search.query.filter_by(status=True) 
+    return render_template('Outgoing.html', title='Outgoing', form=form, items=items)
 
 @app.route('/New_inventory', methods = ['GET', 'POST'])
 def New_inventory():

@@ -2,12 +2,32 @@
 
 {% block content %}
 <h1>Outgoing</h1>
-<form action="" method="post">
+<form action="" method="POST">
     {{ form.hidden_tag() }}
     {% from "_formhelpers.html" import render_field %}
     <dl>
-        {{ render_field(form.barcode) }}
+        <p>{{ render_field(form.barcode) }}</p>
+        <p>{{ form.Search }}</p>
+        <p>{{ form.Outgoing }}</p>
     </dl>
-    <p><input type="submit" value=Submit></p>
 </form>
+<style>
+    table, th, td {
+      border: 1px solid black;
+    }
+</style>
+<table style="width:100%">
+    <tr valign="top">
+        <th>Barcode</th>
+        <th>Item Type</th>
+        <th>Item Size</th>
+        <th>Status</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.barcode }}</td><td>{{ item.item_type }}</td><td>{{ item.item_size }}</td><td>{{ item.status }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
 {% endblock %}

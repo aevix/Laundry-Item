@@ -13,6 +13,8 @@ class search_item(FlaskForm):
     barcode = StringField('Barcode', validators=None)
     Search = SubmitField(label='Search')
     Incoming = SubmitField(label='Incoming')
+    Outgoing = SubmitField(label='Outgoing')
+    
 
 
 
