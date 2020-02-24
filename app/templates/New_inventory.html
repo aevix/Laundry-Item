@@ -23,10 +23,11 @@
         <th>Barcode</th>
         <th>Item Type</th>
         <th>Item Size</th>
+        <th>Status</th>
     </tr>
     {% for item in items %}
     <tr>
-        <td>{{ item.barcode }}</td><td>{{ item.item_type }}</td><td>{{ item.item_size }}</td>
+        <td>{{ item.barcode }}</td><td>{{ item.item_type }}</td><td>{{ item.item_size }}</td><td>{{ item.status }}</td>
     </tr>
     {% endfor %}
 </table>

@@ -29,6 +29,11 @@ def Incoming():
                     db.session.add(searched)
                     db.session.commit()
     elif form.Incoming.data:
+        changes = Search.query.all()
+        for change in changes:
+            cl = Laundry.query.filter_by(barcode=change.barcode).first()
+            cl.status=True
+            db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
         return redirect(url_for('Incoming'))
@@ -55,8 +60,8 @@ def Outgoing():
     elif form.Outgoing.data:
         changes = Search.query.all()
         for change in changes:
-            change_laundry = Laundry.query.filter_by(barcode=change.barcode)
-            change_laundry.status=False
+            cl = Laundry.query.filter_by(barcode=change.barcode).first()
+            cl.status=False
             db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
