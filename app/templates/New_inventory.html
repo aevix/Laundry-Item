@@ -10,7 +10,8 @@
         {{ render_field(form.type) }}
         {{ render_field(form.size) }}
     </dl>
-    <p><input type="submit" value=Submit></p>
+    <p>{{ form.submit }}</p>
+    <p>{{ form.delete }}</p>
 </form>
 <style>
     table, th, td {

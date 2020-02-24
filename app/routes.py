@@ -73,11 +73,24 @@ def Outgoing():
 @app.route('/New_inventory', methods = ['GET', 'POST'])
 def New_inventory():
     form = item_template()
-    if form.validate_on_submit():
-        new_item = Laundry(barcode = form.barcode.data, item_type=form.type.data,item_size=form.size.data, status=True)
-        db.session.add(new_item)
-        db.session.commit()
-        flash('Item has entered the database!')
-        return redirect(url_for('New_inventory'))
+    if form.submit.data:
+        if form.validate_on_submit():
+            new_item = Laundry(barcode = form.barcode.data, item_type=form.type.data,item_size=form.size.data, status=True)
+            db.session.add(new_item)
+            db.session.commit()
+            flash('Item has entered the database!')
+            return redirect(url_for('New_inventory'))
+    if form.delete.data:
+        if form.validate_on_submit():
+            sub = Laundry.query.filter_by(barcode=form.barcode.data)
+            if sub.barcode is not None:
+                Laundry.query.filter_by(barcode=form.barcode.data).delete()
+                db.session.commit()
+                flash('Item successfully deleted!')
+            else:
+                flash('Item is not in the inventory!')
+            return redirect(url_for('New_inventory'))
+
+
     items = Laundry.query.all()
     return render_template('New_inventory.html', title='New_inventory', form=form, items=items)
