@@ -82,7 +82,7 @@ def New_inventory():
             return redirect(url_for('New_inventory'))
     if form.delete.data:
         if form.validate_on_submit():
-            sub = Laundry.query.filter_by(barcode=form.barcode.data)
+            sub = Laundry.query.filter_by(barcode=form.barcode.data).first()
             if sub.barcode is not None:
                 Laundry.query.filter_by(barcode=form.barcode.data).delete()
                 db.session.commit()
