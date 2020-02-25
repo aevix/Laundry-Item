@@ -103,7 +103,7 @@ def Enter_mass():
         string_sl = string.splitlines()
         for sl in string_sl:
             col=sl.split()
-            new_item = Laundry(barcode = col[0], item_type=col[1], item_size=col[2])
+            new_item = Laundry(barcode = col[0], item_type=col[1], item_size=col[2], status=True)
             db.session.add(new_item)
             db.session.commit()
             flash('Items have entered the data base!')
