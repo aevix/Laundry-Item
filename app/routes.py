@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app import app, db
-from app.forms import item_template, search_item
+from app.forms import item_template, search_item, enter_mass
 from app.models import Laundry, Search
 from werkzeug.urls import url_parse
 from datetime import datetime
@@ -83,7 +83,7 @@ def New_inventory():
     if form.delete.data:
         if form.validate_on_submit():
             sub = Laundry.query.filter_by(barcode=form.barcode.data).first()
-            if sub.barcode is not None:
+            if sub is not None:
                 Laundry.query.filter_by(barcode=form.barcode.data).delete()
                 db.session.commit()
                 flash('Item successfully deleted!')
@@ -94,3 +94,8 @@ def New_inventory():
 
     items = Laundry.query.all()
     return render_template('New_inventory.html', title='New_inventory', form=form, items=items)
+
+@app.route('/Enter_mass', methods=['GET', 'POST'])
+def Enter_mass():
+    form = enter_mass()
+    return render_template('Enter_mass.html', title='Enter List of Items', form=form)
