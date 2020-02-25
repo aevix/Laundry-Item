@@ -107,4 +107,9 @@ def Enter_mass():
             db.session.add(new_item)
             db.session.commit()
             flash('Items have entered the data base!')
+    if form.Delete_All.data:
+        if form.mass_text.data == "0934":
+            db.session.query(Laundry).delete()
+            db.session.commit()
+            return redirect(url_for('New_inventory'))
     return render_template('Enter_mass.html', title='Enter List of Items', form=form)

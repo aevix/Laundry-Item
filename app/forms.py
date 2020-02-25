@@ -19,6 +19,7 @@ class search_item(FlaskForm):
 class enter_mass(FlaskForm):
     mass_text= TextAreaField(label='String Entry', validators=[DataRequired(),Length(min=1,max=1000)])
     submit = SubmitField(label='Enter Items')
+    Delete_All = SubmitField(label='Delete All')
 
 
 
