@@ -17,7 +17,7 @@ class search_item(FlaskForm):
     Outgoing = SubmitField(label='Outgoing')
 
 class enter_mass(FlaskForm):
-    mass_text= TextAreaField('MassText', validators=[Length(min=0, max=1000)])
+    mass_text= TextAreaField(label='String Entry', validators=[DataRequired(),Length(min=1,max=1000)])
     submit = SubmitField(label='Enter Items')
 
 

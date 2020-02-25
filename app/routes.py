@@ -98,4 +98,13 @@ def New_inventory():
 @app.route('/Enter_mass', methods=['GET', 'POST'])
 def Enter_mass():
     form = enter_mass()
+    if form.submit.data:
+        string = form.mass_text.data
+        string_sl = string.splitlines()
+        for sl in string_sl:
+            col=sl.split()
+            new_item = Laundry(barcode = col[0], item_type=col[1], item_size=col[2])
+            db.session.add(new_item)
+            db.session.commit()
+            flash('Items have entered the data base!')
     return render_template('Enter_mass.html', title='Enter List of Items', form=form)

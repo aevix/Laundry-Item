@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Copy and Paste List here:</h1>
-<p>{{ form.mass_text }}</p>
-<p>{{ form.submit }}</p>
-
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {% from "_formhelpers.html" import render_field %}
+    <dl>
+        {{ render_field(form.mass_text) }}
+    </dl>
+    <p>{{ form.submit }}</p>
+</form>
 {% endblock %}
