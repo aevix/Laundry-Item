@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app import app, db
 from app.forms import item_template, search_item, enter_mass
-from app.models import Laundry, Search
+from app.models import Laundry, Search, Timestamp
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -64,6 +64,9 @@ def Outgoing():
             cl = Laundry.query.filter_by(barcode=change.barcode).first()
             cl.status=False
             db.session.commit()
+            time = Timestamp(item=change.barcode)
+            db.session.add(time)
+            db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
         return redirect(url_for('Outgoing'))
@@ -91,9 +94,13 @@ def New_inventory():
                 flash('Item is not in the inventory!')
             return redirect(url_for('New_inventory'))
 
-
-    items = Laundry.query.all()
-    return render_template('New_inventory.html', title='New_inventory', form=form, items=items)
+    page = request.args.get('page', 1, type=int)
+    items = Laundry.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('New_inventory', page=items.next_num) \
+        if items.has_next else None
+    prev_url = url_for('New_inventory', page=items.prev_num) \
+        if items.has_prev else None
+    return render_template('New_inventory.html', title='New_inventory', form=form, items=items.items, next_url=next_url, prev_url=prev_url)
 
 @app.route('/Enter_mass', methods=['GET', 'POST'])
 def Enter_mass():

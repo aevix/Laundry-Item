@@ -18,7 +18,7 @@ class Laundry(db.Model):
 class Timestamp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    item_id = db.Column(db.Integer, db.ForeignKey('laundry.id'))
+    item_id = db.Column(db.String, db.ForeignKey('laundry.barcode'))
 
     def __repr__(self):
         return '<time: {}>'.format(self.timestamp)

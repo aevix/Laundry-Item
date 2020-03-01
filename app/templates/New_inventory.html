@@ -12,7 +12,7 @@
     </dl>
     <p>{{ form.submit }}</p>
     <p>{{ form.delete }}</p>
-    <p>{{ form.enter }}</p>
+
     <p><a href="{{ url_for('Enter_mass') }}">Click to Enter List of Items</a></p>
 </form>
 <style>
@@ -34,5 +34,11 @@
     </tr>
     {% endfor %}
 </table>
+{% if prev_url %}
+<a href="{{ prev_url }}">Back</a>
+{% endif %}
+{% if next_url %}
+<a href="{{ next_url }}">Next</a>
+{% endif %}
 
 {% endblock %}
