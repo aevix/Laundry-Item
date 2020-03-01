@@ -1,7 +1,7 @@
 from datetime import datetime
 from app import db
 
-
+#Main Laundry tracking table
 class Laundry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     barcode = db.Column(db.String(20), index = True)
@@ -14,7 +14,7 @@ class Laundry(db.Model):
     def __repr__(self):
         return '<Item: {} {} {} {} {}>'.format(self.barcode, self.item_type, self.item_size, self.item_note, self.status)
 
-
+#Time stamp table that keeps track any time laundry is moved
 class Timestamp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -23,6 +23,7 @@ class Timestamp(db.Model):
     def __repr__(self):
         return '<time: {}>'.format(self.timestamp)
 
+#Temporary Search table to create a queue while entering items in or out of the facility
 class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     barcode = db.Column(db.String(20), index = True)

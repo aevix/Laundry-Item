@@ -5,9 +5,9 @@ from app.forms import item_template, search_item, enter_mass
 from app.models import Laundry, Search, Timestamp
 from werkzeug.urls import url_parse
 from datetime import datetime
-
+#Renders home page and displays items in a table that still has not come back in the inventory
 @app.route('/')
-@app.route('/home_template', methods=['GET'])
+@app.route('/home_template', methods=['GET','POST'])
 def Home():
     page = request.args.get('page', 1, type=int)
     items = Laundry.query.filter_by(status=False).paginate(page, app.config['POSTS_PER_PAGE'], False)
@@ -17,6 +17,8 @@ def Home():
         if items.has_prev else None
     return render_template('home_template.html', title='Home', items=items.items, next_url=next_url, prev_url=prev_url)
 
+
+#Renders incoming page that lets users enter in items that haven come back from cleaning
 @app.route('/Incoming', methods = ['GET', 'POST'])
 def Incoming():
     form = search_item()
@@ -47,6 +49,8 @@ def Incoming():
     items = Search.query.filter_by(status=False)    
     return render_template('Incoming.html', title='Incoming', form=form, items=items)
 
+
+#Renders outgoing page that allows users to check out items to be cleaned
 @app.route('/Outgoing', methods = ['GET', 'POST'])
 def Outgoing():
     form = search_item()
@@ -69,6 +73,7 @@ def Outgoing():
         for change in changes:
             cl = Laundry.query.filter_by(barcode=change.barcode).first()
             cl.status=False
+            ts = Timestamp(item=cl)            
             db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
@@ -76,6 +81,8 @@ def Outgoing():
     items = Search.query.filter_by(status=True) 
     return render_template('Outgoing.html', title='Outgoing', form=form, items=items)
 
+
+#New items that has been purchased can be entered into the inventory to be tracked.
 @app.route('/New_inventory', methods = ['GET', 'POST'])
 def New_inventory():
     form = item_template()
@@ -105,6 +112,9 @@ def New_inventory():
         if items.has_prev else None
     return render_template('New_inventory.html', title='New_inventory', form=form, items=items.items, next_url=next_url, prev_url=prev_url)
 
+
+#If there is a case where there are mass quantities of items that needs to be transferred into the database
+#this page will allow multiple string entry in the CORRECT FORMAT.
 @app.route('/Enter_mass', methods=['GET', 'POST'])
 def Enter_mass():
     form = enter_mass()
@@ -123,3 +133,7 @@ def Enter_mass():
             db.session.commit()
             return redirect(url_for('New_inventory'))
     return render_template('Enter_mass.html', title='Enter List of Items', form=form)
+
+@app.route('/<id>', methods=['GET','POST'])
+def view():
+    return render_template('view.html', title='Historical Data')
