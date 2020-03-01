@@ -9,8 +9,13 @@ from datetime import datetime
 @app.route('/')
 @app.route('/home_template', methods=['GET'])
 def Home():
-    items = Laundry.query.filter_by(status=False)
-    return render_template('home_template.html', title='Home', items=items)
+    page = request.args.get('page', 1, type=int)
+    items = Laundry.query.filter_by(status=False).paginate(page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('New_inventory', page=items.next_num) \
+        if items.has_next else None
+    prev_url = url_for('New_inventory', page=items.prev_num) \
+        if items.has_prev else None
+    return render_template('home_template.html', title='Home', items=items.items, next_url=next_url, prev_url=prev_url)
 
 @app.route('/Incoming', methods = ['GET', 'POST'])
 def Incoming():
@@ -34,6 +39,7 @@ def Incoming():
         for change in changes:
             cl = Laundry.query.filter_by(barcode=change.barcode).first()
             cl.status=True
+            ts = Timestamp(item=cl)
             db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
@@ -63,9 +69,6 @@ def Outgoing():
         for change in changes:
             cl = Laundry.query.filter_by(barcode=change.barcode).first()
             cl.status=False
-            db.session.commit()
-            time = Timestamp(item=change.barcode)
-            db.session.add(time)
             db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
