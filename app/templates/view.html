@@ -2,5 +2,25 @@
 
 {% block content %}
 <h1>Item History</h1><br>
+{% from "_formhelpers.html" import render_field %}
+<form action="" method="post">
+<p>{{ render_field(form.barcode) }}</p><p>{{ form.search }}</p>
+</form>
+<style>
+  table, th, td {
+    border: 1px solid black;
+  }
+</style>
+<table style="width:100%">
+  <tr valign="top">
+      <th>Time</th>
+      <th>Status</th>
+  </tr>
+  {% for time in times %}
+  <tr>
+      <td>{{ time.timestamp }}</td><td>{{ time.status }}</td>
+  </tr>
+  {% endfor %}
 
+</table>
 {% endblock %}

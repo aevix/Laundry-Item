@@ -1,10 +1,14 @@
 from flask import render_template, flash, redirect, url_for, request
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app import app, db
-from app.forms import item_template, search_item, enter_mass
-from app.models import Laundry, Search, Timestamp
+from app.forms import item_template, search_item, enter_mass, view_item
+from app.models import Laundry, Search, Time
 from werkzeug.urls import url_parse
 from datetime import datetime
+from sqlalchemy import desc
+
+
+
 #Renders home page and displays items in a table that still has not come back in the inventory
 @app.route('/')
 @app.route('/home_template', methods=['GET','POST'])
@@ -40,8 +44,11 @@ def Incoming():
         changes = Search.query.all()
         for change in changes:
             cl = Laundry.query.filter_by(barcode=change.barcode).first()
-            cl.status=True
-            ts = Timestamp(item=cl)
+            cl.status=True  
+            db.session.commit()
+        for change in changes:
+            ts = Time(barcode=change.barcode, status=True)
+            db.session.add(ts)
             db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
@@ -72,8 +79,11 @@ def Outgoing():
         changes = Search.query.all()
         for change in changes:
             cl = Laundry.query.filter_by(barcode=change.barcode).first()
-            cl.status=False
-            ts = Timestamp(item=cl)            
+            cl.status=False            
+            db.session.commit()
+        for change in changes:
+            ts = Time(barcode=change.barcode, status=False)
+            db.session.add(ts)
             db.session.commit()
         db.session.query(Search).delete()
         db.session.commit()
@@ -114,7 +124,7 @@ def New_inventory():
 
 
 #If there is a case where there are mass quantities of items that needs to be transferred into the database
-#this page will allow multiple string entry in the CORRECT FORMAT.
+#this page will allow multiple string entry ONLY IN THE CORRECT FORMAT.
 @app.route('/Enter_mass', methods=['GET', 'POST'])
 def Enter_mass():
     form = enter_mass()
@@ -127,6 +137,7 @@ def Enter_mass():
             db.session.add(new_item)
             db.session.commit()
             flash('Items have entered the data base!')
+    #secret delete all data from Laundry data base. Must activate the button in the Enter_mass.html to use it!
     if form.Delete_All.data:
         if form.mass_text.data == "0934":
             db.session.query(Laundry).delete()
@@ -134,6 +145,12 @@ def Enter_mass():
             return redirect(url_for('New_inventory'))
     return render_template('Enter_mass.html', title='Enter List of Items', form=form)
 
-@app.route('/<id>', methods=['GET','POST'])
+
+#page to search item history
+@app.route('/view', methods=['GET','POST'])
 def view():
-    return render_template('view.html', title='Historical Data')
+    form = view_item()
+    if form.validate_on_submit:
+        times = Time.query.filter_by(barcode=form.barcode.data).order_by(desc(Time.timestamp))
+        return render_template('view.html', title='Historical Data', form=form, times=times)
+    return render_template('view.html', title='Historical Data', form=form)

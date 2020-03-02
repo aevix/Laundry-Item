@@ -24,6 +24,11 @@ class enter_mass(FlaskForm):
     submit = SubmitField(label='Enter Items')
     Delete_All = SubmitField(label='Delete All')
 
+#this form is for view.html template to look for item in time stamp table
+class view_item(FlaskForm):
+    barcode = StringField('Barcode', validators=[DataRequired()])
+    search = SubmitField(label='Search')
+
 
 
 
