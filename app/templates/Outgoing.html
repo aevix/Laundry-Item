@@ -4,9 +4,10 @@
 <h1>Outgoing</h1>
 <form action="" method="POST">
     {{ form.hidden_tag() }}
-    {% from "_formhelpers.html" import render_field %}
+    
     <dl>
-        <p>{{ render_field(form.barcode) }}</p>
+        <p>{{ form.barcode.label }}</p>
+        <div>{{ form.barcode(size=32) }}</div>
         <p>{{ form.Search }}</p>
         <p>{{ form.Outgoing }}</p>
     </dl>

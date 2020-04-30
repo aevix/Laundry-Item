@@ -4,11 +4,15 @@
 <h1>Enter New Inventory</h1>
 <form action="" method="post">
     {{ form.hidden_tag() }}
-    {% from "_formhelpers.html" import render_field %}
+
     <dl>
-        {{ render_field(form.barcode) }}
-        {{ render_field(form.type) }}
-        {{ render_field(form.size) }}
+        <p>{{ form.barcode.label }}</p>
+        <div>{{ form.barcode(size=32) }}</div>
+        <p>{{ form.type.label }}</p>
+        <div>{{ form.type(size=10) }}</div>
+        <p>{{ form.size.label }}</p>
+        <div>{{ form.size(size=10) }}</div>
+
     </dl>
     <p>{{ form.submit }}</p>
     <p>{{ form.delete }}</p>

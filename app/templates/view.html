@@ -4,7 +4,9 @@
 <h1>Item History</h1><br>
 {% from "_formhelpers.html" import render_field %}
 <form action="" method="post">
-<p>{{ render_field(form.barcode) }}</p><p>{{ form.search }}</p>
+<p>{{ form.barcode.label }}</p>
+<div>{{ form.barcode(size=32) }}</div>
+<p>{{ form.search }}</p>
 </form>
 <style>
   table, th, td {

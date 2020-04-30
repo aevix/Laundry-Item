@@ -1,9 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Length
 from app import app, db
 from app.forms import item_template, search_item, enter_mass, view_item
 from app.models import Laundry, Search, Time
-from werkzeug.urls import url_parse
 from datetime import datetime
 from sqlalchemy import desc
 
