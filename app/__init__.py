@@ -10,3 +10,5 @@ db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 
 from app import routes, models, app
+
+#type "flask run -h localhost -p 3000" command line to start sever on localhost 3000 after "venv/scripts/activate"
